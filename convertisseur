@@ -1,0 +1,22 @@
+const bitcoinInput = document.getElementById('bitcoin-input');
+const euroInput = document.getElementById('euro-input');
+const convertButton = document.getElementById('convert-button');
+const result = document.getElementById('result');
+
+const apiUrl = 'https://api.coinbase.com/v2/exchange-rates?currency=BTC';
+
+async function getExchangeRate() {
+  const response = await fetch(apiUrl);
+  const data = await response.json();
+  return data.data.rates.EUR;
+}
+
+function convertBitcoinToEuro() {
+  const bitcoinValue = parseFloat(bitcoinInput.value);
+  const exchangeRate = parseFloat(getExchangeRate());
+  const euroValue = bitcoinValue * exchangeRate;
+  euroInput.value = euroValue.toFixed(2);
+  result.innerHTML = `${bitcoinValue} Bitcoin = ${euroValue.toFixed(2)} Euro`;
+}
+
+convertButton.addEventListener('click', convertBitcoinToEuro);
